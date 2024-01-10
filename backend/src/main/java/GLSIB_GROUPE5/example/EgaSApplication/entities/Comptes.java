@@ -15,11 +15,11 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class Comptes {
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "compteType")
+public abstract class Comptes {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private String numCompte;
     private TypeCompte typeCompte;
     private LocalDateTime dateCreated;
