@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Users {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -35,8 +35,8 @@ public class Users {
     @NotBlank(message = "veuillez renseignez votre nationnalité")
     private String nationnalite;
     @OneToMany(mappedBy = "proprietaire")
-    private List<Comptes> comptes;
+    private List<Compte> comptes;
     @OneToMany(mappedBy = "client")
-    private List<Operations> operations;
+    private List<Operation> operations;
 
 }

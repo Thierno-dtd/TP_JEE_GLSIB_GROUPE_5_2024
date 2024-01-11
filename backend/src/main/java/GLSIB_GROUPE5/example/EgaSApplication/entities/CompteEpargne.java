@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @DiscriminatorValue("E")
-public class CompteEpargne extends Comptes{
+public class CompteEpargne extends Compte {
     private BigDecimal taux2Interet;
 }

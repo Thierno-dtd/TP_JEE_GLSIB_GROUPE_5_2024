@@ -15,18 +15,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Operations {
+public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDateTime date;
-    private TypeOperation operation;
+    private TypeOperation type;
     private BigDecimal montant;
     @ManyToOne
     @JoinColumn(name = "compte_id")
-    private Users client;
+    private User client;
     @ManyToOne
     @JoinColumn(name = "numCpt")
-    private Comptes numCpt;
+    private Compte numCpt;
 
 }

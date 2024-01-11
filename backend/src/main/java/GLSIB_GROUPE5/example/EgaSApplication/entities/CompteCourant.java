@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @DiscriminatorValue("C")
-public class CompteCourant extends Comptes{
-    private BigDecimal decouverAuorise;
+public class CompteCourant extends Compte {
+    private BigDecimal decouvertAutorise;
 }
