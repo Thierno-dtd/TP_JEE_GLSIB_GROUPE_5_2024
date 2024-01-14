@@ -1,14 +1,9 @@
 package GLSIB_GROUPE5.example.EgaSApplication.mappers;
 
 import GLSIB_GROUPE5.example.EgaSApplication.constants.TypeCompte;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.CompteCourantDto;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.CompteDto;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.OperationDto;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.UserDto;
-import GLSIB_GROUPE5.example.EgaSApplication.entities.Compte;
-import GLSIB_GROUPE5.example.EgaSApplication.entities.CompteCourant;
-import GLSIB_GROUPE5.example.EgaSApplication.entities.Operation;
-import GLSIB_GROUPE5.example.EgaSApplication.entities.User;
+import GLSIB_GROUPE5.example.EgaSApplication.dto.*;
+import GLSIB_GROUPE5.example.EgaSApplication.entities.*;
+import org.springframework.beans.BeanUtils;
 
 public class ApplicationsMapper {
     private UserDto convertEntityToDto(User user){
@@ -51,10 +46,33 @@ public class ApplicationsMapper {
     }
 
 
-    /*private CompteCourantDto convertEntityToDto(CompteCourant compteCourant){
-        return CompteCourantDto.builder()
-                .decouvertAutorise(compteCourant.getD)
+    private CompteCourantDto convertEntityToDto(CompteCourant compteCourant){
+        CompteCourantDto compteCourantDto = new CompteCourantDto();
+        BeanUtils.copyProperties(compteCourant, compteCourantDto);
+        compteCourantDto.setProprietaireId(compteCourant.getProprietaire().getId());
+        compteCourantDto.setTypeCompte(compteCourant.getTypeCompte());
+        return  compteCourantDto;
+    }
+    private CompteCourant convertDtoToEntity(CompteCourantDto compteCourantDto){
+        CompteCourant compteCourant = new CompteCourant();
+        BeanUtils.copyProperties(compteCourantDto,compteCourant);
+        compteCourant.setProprietaire(User.builder().id(compteCourantDto.getProprietaireId()).build());
+        //compteCourant.setTypeCompte(compteCourantDto.);
+        return compteCourant;
+    }
 
-                .build();
-    }*/
+    private CompteEpargneDto convertEntityToDto(CompteEpargne compteEpargne){
+        CompteEpargneDto compteEpargneDto = new CompteEpargneDto();
+        BeanUtils.copyProperties(compteEpargne, compteEpargneDto);
+        compteEpargneDto.setProprietaireId(compteEpargne.getProprietaire().getId());
+        compteEpargneDto.setTypeCompte(compteEpargne.getTypeCompte());
+        return  compteEpargneDto;
+    }
+    private CompteEpargne convertDtoToEntity(CompteEpargneDto compteEpargneDto){
+        CompteEpargne compteEpargne = new CompteEpargne();
+        BeanUtils.copyProperties(compteEpargneDto,compteEpargne);
+        compteEpargne.setProprietaire(User.builder().id(compteEpargneDto.getProprietaireId()).build());
+        //compteCourant.setTypeCompte(compteCourantDto.);
+        return compteEpargne;
+    }
 }
