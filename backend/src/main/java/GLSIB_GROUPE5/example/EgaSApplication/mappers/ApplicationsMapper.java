@@ -6,7 +6,7 @@ import GLSIB_GROUPE5.example.EgaSApplication.entities.*;
 import org.springframework.beans.BeanUtils;
 
 public class ApplicationsMapper {
-    private UserDto convertEntityToDto(User user){
+    public UserDto convertEntityToDto(User user){
         return UserDto.builder()
                 .nom(user.getNom())
                 .prenom(user.getPrenom())
@@ -20,7 +20,7 @@ public class ApplicationsMapper {
                 .build();
     }
 
-    private User convertDtoToEntity(UserDto userDto){
+    public User convertDtoToEntity(UserDto userDto){
         return User.builder()
                 .nom(userDto.getNom())
                 .prenom(userDto.getPrenom())
@@ -35,7 +35,7 @@ public class ApplicationsMapper {
                 .build();
     }
 
-    private OperationDto convertEntityToDto(Operation operation){
+    public OperationDto convertEntityToDto(Operation operation){
         return OperationDto.builder()
                 .type(operation.getType())
                 .montant(operation.getMontant())
@@ -46,14 +46,14 @@ public class ApplicationsMapper {
     }
 
 
-    private CompteCourantDto convertEntityToDto(CompteCourant compteCourant){
+    public CompteCourantDto convertEntityToDto(CompteCourant compteCourant){
         CompteCourantDto compteCourantDto = new CompteCourantDto();
         BeanUtils.copyProperties(compteCourant, compteCourantDto);
         compteCourantDto.setProprietaireId(compteCourant.getProprietaire().getId());
         compteCourantDto.setTypeCompte(compteCourant.getTypeCompte());
         return  compteCourantDto;
     }
-    private CompteCourant convertDtoToEntity(CompteCourantDto compteCourantDto){
+    public CompteCourant convertDtoToEntity(CompteCourantDto compteCourantDto){
         CompteCourant compteCourant = new CompteCourant();
         BeanUtils.copyProperties(compteCourantDto,compteCourant);
         compteCourant.setProprietaire(User.builder().id(compteCourantDto.getProprietaireId()).build());
@@ -61,14 +61,14 @@ public class ApplicationsMapper {
         return compteCourant;
     }
 
-    private CompteEpargneDto convertEntityToDto(CompteEpargne compteEpargne){
+    public CompteEpargneDto convertEntityToDto(CompteEpargne compteEpargne){
         CompteEpargneDto compteEpargneDto = new CompteEpargneDto();
         BeanUtils.copyProperties(compteEpargne, compteEpargneDto);
         compteEpargneDto.setProprietaireId(compteEpargne.getProprietaire().getId());
         compteEpargneDto.setTypeCompte(compteEpargne.getTypeCompte());
         return  compteEpargneDto;
     }
-    private CompteEpargne convertDtoToEntity(CompteEpargneDto compteEpargneDto){
+    public CompteEpargne convertDtoToEntity(CompteEpargneDto compteEpargneDto){
         CompteEpargne compteEpargne = new CompteEpargne();
         BeanUtils.copyProperties(compteEpargneDto,compteEpargne);
         compteEpargne.setProprietaire(User.builder().id(compteEpargneDto.getProprietaireId()).build());
