@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class CompteDto {
+public class CompteDto {
     private String numCompte;
     private TypeCompte typeCompte;
     private LocalDateTime dateCreated;

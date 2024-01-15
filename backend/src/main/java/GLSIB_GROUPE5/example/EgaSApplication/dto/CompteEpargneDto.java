@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+//@Builder
 @Data
 public class CompteEpargneDto extends CompteDto {
     private BigDecimal taux2Interet;

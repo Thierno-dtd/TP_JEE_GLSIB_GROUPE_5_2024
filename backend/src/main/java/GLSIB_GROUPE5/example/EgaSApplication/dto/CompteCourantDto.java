@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
-@Builder
+//@Builder
 @Data
 public class CompteCourantDto extends CompteDto{
     private BigDecimal decouvertAutorise;

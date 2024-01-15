@@ -4,7 +4,9 @@ import GLSIB_GROUPE5.example.EgaSApplication.constants.TypeCompte;
 import GLSIB_GROUPE5.example.EgaSApplication.dto.*;
 import GLSIB_GROUPE5.example.EgaSApplication.entities.*;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 
+@Service
 public class ApplicationsMapper {
     public UserDto convertEntityToDto(User user){
         return UserDto.builder()
