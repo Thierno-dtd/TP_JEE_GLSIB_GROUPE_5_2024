@@ -18,7 +18,6 @@ public class CompteDto {
     private TypeCompte typeCompte;
     private LocalDateTime dateCreated;
     private BigDecimal solde;
-
     private int proprietaireId;
 
 }

@@ -63,18 +63,37 @@ public class ApplicationsMapper {
         return compteCourant;
     }
 
-    public CompteEpargneDto convertEntityToDto(CompteEpargne compteEpargne){
-        CompteEpargneDto compteEpargneDto = new CompteEpargneDto();
-        BeanUtils.copyProperties(compteEpargne, compteEpargneDto);
-        compteEpargneDto.setProprietaireId(compteEpargne.getProprietaire().getId());
-        compteEpargneDto.setTypeCompte(compteEpargne.getTypeCompte());
-        return  compteEpargneDto;
+    public <T> T convertEntityToDto(Compte compte){
+        if(compte.getTypeCompte() == TypeCompte.E){
+            CompteEpargneDto compteEpargneDto = new CompteEpargneDto();
+            BeanUtils.copyProperties(compte, compteEpargneDto);
+            compteEpargneDto.setProprietaireId(compte.getProprietaire().getId());
+            compteEpargneDto.setTypeCompte(compte.getTypeCompte());
+            return (T) compteEpargneDto;
+        }
+        if(compte.getTypeCompte() == TypeCompte.C){
+            CompteCourantDto compteCourantDto = new CompteCourantDto();
+            BeanUtils.copyProperties(compte, compteCourantDto);
+            compteCourantDto.setProprietaireId(compte.getProprietaire().getId());
+            compteCourantDto.setTypeCompte(compte.getTypeCompte());
+            return (T) compteCourantDto;
+        }
+        return null;
     }
-    public CompteEpargne convertDtoToEntity(CompteEpargneDto compteEpargneDto){
-        CompteEpargne compteEpargne = new CompteEpargne();
-        BeanUtils.copyProperties(compteEpargneDto,compteEpargne);
-        compteEpargne.setProprietaire(User.builder().id(compteEpargneDto.getProprietaireId()).build());
-        //compteCourant.setTypeCompte(compteCourantDto.);
-        return compteEpargne;
+    public <T> T convertDtoToEntity(CompteDto compteDto){
+        if(compteDto.getTypeCompte() == TypeCompte.C){
+            CompteCourant compteCourant = new CompteCourant();
+            BeanUtils.copyProperties(compteDto, compteCourant);
+            compteCourant.setProprietaire(User.builder().id(compteDto.getProprietaireId()).build());
+            return (T) compteCourant;
+        }
+        if(compteDto.getTypeCompte() == TypeCompte.E) {
+            CompteEpargne compteEpargne = new CompteEpargne();
+            BeanUtils.copyProperties(compteDto, compteEpargne);
+            compteEpargne.setProprietaire(User.builder().id(compteDto.getProprietaireId()).build());
+            //compteCourant.setTypeCompte(compteCourantDto.);
+            return (T) compteEpargne;
+        }
+        return null;
     }
 }
