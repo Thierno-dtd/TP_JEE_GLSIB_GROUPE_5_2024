@@ -2,6 +2,7 @@ package GLSIB_GROUPE5.example.EgaSApplication.services.serviceImpl;
 
 import GLSIB_GROUPE5.example.EgaSApplication.constants.TypeCompte;
 import GLSIB_GROUPE5.example.EgaSApplication.dto.CompteDto;
+import GLSIB_GROUPE5.example.EgaSApplication.dto.CompteRequestDto;
 import GLSIB_GROUPE5.example.EgaSApplication.entities.Compte;
 import GLSIB_GROUPE5.example.EgaSApplication.exceptions.EntityNotFoundException;
 import GLSIB_GROUPE5.example.EgaSApplication.exceptions.InvalidEntityException;
@@ -14,6 +15,8 @@ import org.iban4j.Iban;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,14 +27,13 @@ public class CompteService implements ICompteServices {
     private final CompteRepository compteRepository;
     private  final UserService userService;
     @Override
-    public <T> T ajouterCompte(CompteDto compteDto) {
-        Compte compte = getOneCompte(compteDto.getNumCompte());
-        if(compte != null) throw new EntityNotFoundException("Ce compte existe deja");
-        else {
+    public <T> T ajouterCompte(CompteRequestDto compteDto) {
+        Compte cpt = applicationsMapper.convertDtoToEntity(compteDto);
             String nouveauNumCompte = generateFormattedIban();
-            compteDto.setNumCompte(nouveauNumCompte);
-            return (T) compteRepository.save(applicationsMapper.convertDtoToEntity(compteDto));
-        }
+            cpt.setNumCompte(nouveauNumCompte);
+            cpt.setDateCreated(LocalDateTime.now());
+            cpt.setSolde(BigDecimal.ZERO);
+            return (T) applicationsMapper.convertEntityToDto(compteRepository.save(cpt));
     }
 
     @Override
@@ -66,5 +68,9 @@ public class CompteService implements ICompteServices {
 
         // Ajoutez le préfixe "EGA" au numéro de compte de l'IBAN
         return "EGA" + ibanAccountNumber;
+    }
+
+    public Compte ajouterCompte(Compte compteDto) {
+        return compteRepository.save(compteDto);
     }
 }

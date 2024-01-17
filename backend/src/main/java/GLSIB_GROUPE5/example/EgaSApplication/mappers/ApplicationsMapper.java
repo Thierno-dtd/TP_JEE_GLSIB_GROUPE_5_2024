@@ -48,13 +48,13 @@ public class ApplicationsMapper {
     }
 
 
-    public CompteCourantDto convertEntityToDto(CompteCourant compteCourant){
+    /*public CompteCourantDto convertEntityToDto(CompteCourant compteCourant){
         CompteCourantDto compteCourantDto = new CompteCourantDto();
         BeanUtils.copyProperties(compteCourant, compteCourantDto);
         compteCourantDto.setProprietaireId(compteCourant.getProprietaire().getId());
         compteCourantDto.setTypeCompte(compteCourant.getTypeCompte());
         return  compteCourantDto;
-    }
+    }*/
     public CompteCourant convertDtoToEntity(CompteCourantDto compteCourantDto){
         CompteCourant compteCourant = new CompteCourant();
         BeanUtils.copyProperties(compteCourantDto,compteCourant);
@@ -80,20 +80,23 @@ public class ApplicationsMapper {
         }
         return null;
     }
-    public <T> T convertDtoToEntity(CompteDto compteDto){
+    public <T> T convertDtoToEntity(CompteRequestDto compteDto){
         if(compteDto.getTypeCompte() == TypeCompte.C){
             CompteCourant compteCourant = new CompteCourant();
             BeanUtils.copyProperties(compteDto, compteCourant);
+            compteCourant.setDecouvertAutorise(compteDto.getSm());
             compteCourant.setProprietaire(User.builder().id(compteDto.getProprietaireId()).build());
             return (T) compteCourant;
         }
         if(compteDto.getTypeCompte() == TypeCompte.E) {
             CompteEpargne compteEpargne = new CompteEpargne();
             BeanUtils.copyProperties(compteDto, compteEpargne);
+            compteEpargne.setTaux2Interet(compteDto.getSm());
             compteEpargne.setProprietaire(User.builder().id(compteDto.getProprietaireId()).build());
             //compteCourant.setTypeCompte(compteCourantDto.);
             return (T) compteEpargne;
         }
         return null;
     }
+
 }

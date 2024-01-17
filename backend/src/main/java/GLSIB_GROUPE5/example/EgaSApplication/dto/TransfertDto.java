@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class DebitDto {
+public class TransfertDto {
     private String accountId;
-    private double amount;
-    private String description;
+    private BigDecimal amount;
 }

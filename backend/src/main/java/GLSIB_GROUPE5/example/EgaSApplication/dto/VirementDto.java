@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -12,6 +14,5 @@ import lombok.NoArgsConstructor;
 public class VirementDto {
     private String accountSource;
     private String accountDestination;
-    private double amount;
-    private String description;
+    private BigDecimal amount;
 }

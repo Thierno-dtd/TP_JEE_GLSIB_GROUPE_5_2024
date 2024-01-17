@@ -2,6 +2,7 @@ package GLSIB_GROUPE5.example.EgaSApplication.controllers;
 
 import GLSIB_GROUPE5.example.EgaSApplication.constants.TypeCompte;
 import GLSIB_GROUPE5.example.EgaSApplication.dto.CompteDto;
+import GLSIB_GROUPE5.example.EgaSApplication.dto.CompteRequestDto;
 import GLSIB_GROUPE5.example.EgaSApplication.services.serviceImpl.CompteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,8 @@ public class CompteController {
     private final CompteService compteService;
 
     @PostMapping("/")
-    public ResponseEntity<CompteDto> register(@RequestBody CompteDto compteDto){
+    public ResponseEntity<CompteDto> register(@RequestBody CompteRequestDto compteDto){
+
         return ResponseEntity.ok(compteService.ajouterCompte(compteDto));
     }
 
@@ -30,7 +32,7 @@ public class CompteController {
         return  ResponseEntity.ok(compteService.getOneCompte(numCpt));
     }
 
-    @GetMapping("/byTypeAndId/{id}")
+    @GetMapping("/byTypeAndId/{id}/{typeCompte}")
     public ResponseEntity<List<CompteDto>> getAllCompteTypeAndUserId(@PathVariable int id, @PathVariable TypeCompte typeCompte){
         return  ResponseEntity.ok(compteService.getCompteByType(typeCompte, id));
     }
