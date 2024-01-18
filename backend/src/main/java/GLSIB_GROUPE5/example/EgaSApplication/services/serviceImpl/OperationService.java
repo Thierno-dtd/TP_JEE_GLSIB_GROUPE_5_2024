@@ -1,11 +1,7 @@
 package GLSIB_GROUPE5.example.EgaSApplication.services.serviceImpl;
 
-import GLSIB_GROUPE5.example.EgaSApplication.constants.TypeCompte;
 import GLSIB_GROUPE5.example.EgaSApplication.constants.TypeOperation;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.CompteDto;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.OperationDto;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.TransfertDto;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.VirementDto;
+import GLSIB_GROUPE5.example.EgaSApplication.dto.*;
 import GLSIB_GROUPE5.example.EgaSApplication.entities.Compte;
 import GLSIB_GROUPE5.example.EgaSApplication.entities.Operation;
 import GLSIB_GROUPE5.example.EgaSApplication.entities.User;
@@ -15,14 +11,14 @@ import GLSIB_GROUPE5.example.EgaSApplication.mappers.ApplicationsMapper;
 import GLSIB_GROUPE5.example.EgaSApplication.repositories.OperationRepository;
 import GLSIB_GROUPE5.example.EgaSApplication.services.IOperationServcie;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@Service
 @RequiredArgsConstructor
 public class OperationService implements IOperationServcie {
     private final OperationRepository operationRepository;
@@ -49,13 +45,17 @@ public class OperationService implements IOperationServcie {
 
     @Override
     public OperationDto credit(TransfertDto transfertDto, int id) {
-        /* cpt = compteService.getOneCompte(transfertDto.getAccountId());
-        if(cpt.getProprietaireId() != id) throw new InvalidEntityException(" Vous ne possédez pas ce compte là");
-        if(cpt.getSolde().compareTo(transfertDto.getAmount()) == -1){
-            if(cpt.getTypeCompte() == TypeCompte.C){
-                if(cpt.getSolde().plus(cpt.get))
-            }
-        }*/
+        if(compteService.getOneCompte(transfertDto.getAccountId()) instanceof CompteCourantDto){
+            CompteCourantDto cpt = compteService.getOneCompte(transfertDto.getAccountId());
+            if(cpt.getProprietaireId() != id) throw new InvalidEntityException(" Vous ne possédez pas ce compte là");
+            if((cpt.getSolde().add(cpt.getDecouvertAutorise())).compareTo(transfertDto.getAmount()) == -1) throw new InvalidOperationException("Votre solde ne vous permet pas cette opération");
+        }
+        if(compteService.getOneCompte(transfertDto.getAccountId()) instanceof CompteEpargneDto){
+            CompteEpargneDto cpt = compteService.getOneCompte(transfertDto.getAccountId());
+            if(cpt.getProprietaireId() != id) throw new InvalidEntityException(" Vous ne possédez pas ce compte là");
+            if(cpt.getSolde().compareTo(transfertDto.getAmount()) == -1) throw new InvalidOperationException("Votre solde ne vous permet pas cette opération");
+        }
+
         Compte compte = compteService.getOneCompte(transfertDto.getAccountId());
         if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valide");
         else {
@@ -87,4 +87,5 @@ public class OperationService implements IOperationServcie {
                 .amount(virementDto.getAmount())
                 .build();
     }
+
 }
