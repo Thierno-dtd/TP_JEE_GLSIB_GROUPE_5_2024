@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-@Builder
+//@Builder
 @DiscriminatorColumn(name = "compteType")
 public abstract class Compte {
     @Id

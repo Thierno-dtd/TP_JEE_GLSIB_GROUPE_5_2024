@@ -11,8 +11,8 @@ import GLSIB_GROUPE5.example.EgaSApplication.mappers.ApplicationsMapper;
 import GLSIB_GROUPE5.example.EgaSApplication.repositories.OperationRepository;
 import GLSIB_GROUPE5.example.EgaSApplication.services.IOperationServcie;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,14 +20,16 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OperationService implements IOperationServcie {
     private final OperationRepository operationRepository;
     private final ApplicationsMapper applicationsMapper;
     private final CompteService compteService;
     @Override
     public OperationDto debit(TransfertDto transfertDto, int id) {
-        Compte compte = compteService.getOneCompte(transfertDto.getAccountId());
-        if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valid");
+        CompteDto compte = compteService.getOneCompte(transfertDto.getAccountId());
+        log.info(compte.toString());
+        /*if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valid");
         else {
             compte.setSolde(compte.getSolde().add(transfertDto.getAmount()));
             compteService.ajouterCompte(compte);
@@ -38,9 +40,10 @@ public class OperationService implements IOperationServcie {
                                     .client(User.builder().id(id).build())
                                     .date(LocalDateTime.now())
                                     .montant(transfertDto.getAmount())
-                                    .numCpt(Compte.builder().numCompte(transfertDto.getAccountId()).build())
+                                    //.numCpt(Compte.builder().numCompte(transfertDto.getAccountId()).build())
                                     .build()));
-        }
+        }*/
+        return null;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class OperationService implements IOperationServcie {
 
         Compte compte = compteService.getOneCompte(transfertDto.getAccountId());
         if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valide");
-        else {
+        /*else {
             compte.setSolde(compte.getSolde().subtract(transfertDto.getAmount()));
             compteService.ajouterCompte(compte);
             return applicationsMapper.convertEntityToDto(
@@ -68,9 +71,9 @@ public class OperationService implements IOperationServcie {
                                     .client(User.builder().id(id).build())
                                     .date(LocalDateTime.now())
                                     .montant(transfertDto.getAmount())
-                                    .numCpt(Compte.builder().numCompte(transfertDto.getAccountId()).build())
+                                    //.numCpt(Compte.builder().numCompte(transfertDto.getAccountId()).build())
                                     .build()));
-        }
+        }*/ return null;
     }
 
     @Override

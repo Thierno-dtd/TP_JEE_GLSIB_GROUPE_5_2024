@@ -15,17 +15,17 @@ import java.util.List;
 @RequestMapping("/operations")
 public class OperationController {
     private final OperationService operationService;
-    @PostMapping("/{id}")
+    @PostMapping("debit/{id}")
     public ResponseEntity<OperationDto> debit(@RequestBody TransfertDto transfertDto, @PathVariable int id){
         return  ResponseEntity.ok(operationService.debit(transfertDto, id));
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("credit/{id}")
     public ResponseEntity<OperationDto> credi(@RequestBody TransfertDto transfertDto, @PathVariable int id){
         return  ResponseEntity.ok(operationService.credit(transfertDto, id));
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("virement/{id}")
     public ResponseEntity<List<OperationDto>> virement(@RequestBody VirementDto virementDto, @PathVariable int id){
         return  ResponseEntity.ok(operationService.virement(virementDto, id));
     }
