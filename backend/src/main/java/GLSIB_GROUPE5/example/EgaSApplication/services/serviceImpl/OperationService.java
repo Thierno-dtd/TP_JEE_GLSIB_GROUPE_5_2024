@@ -90,7 +90,7 @@ public class OperationService implements IOperationServcie {
     public List<OperationDto> listeOperation(String numCpt, LocalDate date) {
         Compte cpt = compteService.getOneCompte(numCpt);
         if(cpt==null) throw new InvalidEntityException("Ce numéro de compte n''existe pas");
-        return operationRepository.findByNuCptAndDateAfter(numCpt, date).stream().map(op -> applicationsMapper.convertEntityToDto(op)).collect(Collectors.toList());
+        return operationRepository.findByNumCptAndDateAfter(cpt, date).stream().map(op -> applicationsMapper.convertEntityToDto(op)).collect(Collectors.toList());
     }
 
     public TransfertDto dtoToDto(VirementDto virementDto){
