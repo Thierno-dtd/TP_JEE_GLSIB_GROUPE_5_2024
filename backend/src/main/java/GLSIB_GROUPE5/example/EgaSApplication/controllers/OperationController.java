@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -28,5 +29,10 @@ public class OperationController {
     @PostMapping("virement/{id}")
     public ResponseEntity<List<OperationDto>> virement(@RequestBody VirementDto virementDto, @PathVariable int id){
         return  ResponseEntity.ok(operationService.virement(virementDto, id));
+    }
+
+    @GetMapping("ListeOperations/{numCpt}/{date}")
+    public ResponseEntity<List<OperationDto>> getOperation(@PathVariable String numCpt, @PathVariable LocalDate date){
+        return  ResponseEntity.ok(operationService.listeOperation(numCpt, date));
     }
 }

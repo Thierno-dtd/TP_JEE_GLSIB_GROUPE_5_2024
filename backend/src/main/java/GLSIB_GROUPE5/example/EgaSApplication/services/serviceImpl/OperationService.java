@@ -14,9 +14,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,6 +84,13 @@ public class OperationService implements IOperationServcie {
         lstOp.add(credit(dtoToDto(virementDto), id));
         lstOp.add(debit(dtoToDto(virementDto), id));
         return lstOp;
+    }
+
+    @Override
+    public List<OperationDto> listeOperation(String numCpt, LocalDate date) {
+        Compte cpt = compteService.getOneCompte(numCpt);
+        if(cpt==null) throw new InvalidEntityException("Ce numéro de compte n''existe pas");
+        return operationRepository.findByNuCptAndDateAfter(numCpt, date).stream().map(op -> applicationsMapper.convertEntityToDto(op)).collect(Collectors.toList());
     }
 
     public TransfertDto dtoToDto(VirementDto virementDto){
