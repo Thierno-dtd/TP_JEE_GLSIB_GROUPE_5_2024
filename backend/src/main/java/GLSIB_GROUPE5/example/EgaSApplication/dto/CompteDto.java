@@ -17,6 +17,7 @@ public class CompteDto {
     private String numCompte;
     private TypeCompte typeCompte;
     private LocalDateTime dateCreated;
+    private String password;
     private BigDecimal solde;
     private int proprietaireId;
 

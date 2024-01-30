@@ -14,7 +14,8 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class CompteRequestDto {
     private TypeCompte typeCompte;
-    private BigDecimal sm;
+    //private BigDecimal sm;
+    private String password;
     private int proprietaireId;
 
 }

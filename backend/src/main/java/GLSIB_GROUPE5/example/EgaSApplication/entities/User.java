@@ -35,6 +35,7 @@ public class User implements UserDetails {
     @NotBlank(message = "veuillez renseignez votre telephone")
     private String telephone;
     @Email
+    @Column(unique = true)
     private String email;
     @NotBlank(message = "veuillez renseignez votre nationnalité")
     private String nationnalite;

@@ -29,9 +29,9 @@ public class OperationService implements IOperationServcie {
     private final CompteService compteService;
     @Override
     public OperationDto debit(TransfertDto transfertDto, int id) {
-        CompteDto compte = compteService.getOneCompte(transfertDto.getAccountId());
+        Compte compte = compteService.getOneCompte(transfertDto.getAccountId());
         log.info(compte.toString());
-        /*if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valid");
+        if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valid");
         else {
             compte.setSolde(compte.getSolde().add(transfertDto.getAmount()));
             compteService.ajouterCompte(compte);
@@ -44,8 +44,8 @@ public class OperationService implements IOperationServcie {
                                     .montant(transfertDto.getAmount())
                                     //.numCpt(Compte.builder().numCompte(transfertDto.getAccountId()).build())
                                     .build()));
-        }*/
-        return null;
+        }
+
     }
 
     @Override
@@ -63,7 +63,7 @@ public class OperationService implements IOperationServcie {
 
         Compte compte = compteService.getOneCompte(transfertDto.getAccountId());
         if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valide");
-        /*else {
+        else {
             compte.setSolde(compte.getSolde().subtract(transfertDto.getAmount()));
             compteService.ajouterCompte(compte);
             return applicationsMapper.convertEntityToDto(
@@ -75,7 +75,7 @@ public class OperationService implements IOperationServcie {
                                     .montant(transfertDto.getAmount())
                                     //.numCpt(Compte.builder().numCompte(transfertDto.getAccountId()).build())
                                     .build()));
-        }*/ return null;
+        }
     }
 
     @Override

@@ -6,7 +6,7 @@ import GLSIB_GROUPE5.example.EgaSApplication.exceptions.EntityNotFoundException;
 import java.util.List;
 
 public interface IUserService {
-    public UserDto register(UserDto userDto);
+    //public UserDto register(UserDto userDto);
     public List<UserDto> getAllUsers();
     public UserDto getOneUser(int id) throws EntityNotFoundException;
     public void deleteUser(int id);

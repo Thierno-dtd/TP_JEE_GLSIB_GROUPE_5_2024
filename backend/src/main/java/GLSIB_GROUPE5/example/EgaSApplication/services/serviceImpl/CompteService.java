@@ -12,6 +12,7 @@ import GLSIB_GROUPE5.example.EgaSApplication.services.ICompteServices;
 import lombok.RequiredArgsConstructor;
 import org.iban4j.CountryCode;
 import org.iban4j.Iban;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,11 +26,14 @@ public class CompteService implements ICompteServices {
     private final ApplicationsMapper applicationsMapper;
     private final CompteRepository compteRepository;
     private  final UserService userService;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public <T> T ajouterCompte(CompteRequestDto compteDto) {
         Compte cpt = applicationsMapper.convertDtoToEntity(compteDto);
             String nouveauNumCompte = generateFormattedIban();
             cpt.setNumCompte(nouveauNumCompte);
+            cpt.setSolde(BigDecimal.ZERO);
+            cpt.setPassword(passwordEncoder.encode(compteDto.getPassword()));
             cpt.setDateCreated(LocalDateTime.now());
             cpt.setSolde(BigDecimal.ZERO);
             return (T) applicationsMapper.convertEntityToDto(compteRepository.save(cpt));

@@ -20,12 +20,12 @@ public class UserService implements IUserService {
     private final UserRepository usersRepository;
     private final ApplicationsMapper applicationMappers;
 
-    @Override
+    /*@Override
     public UserDto register(UserDto userDto) {
         User user = usersRepository.findByEmail(userDto.getEmail()).orElse(null);
         if(user != null) throw new InvalidOperationException("Ce Email est deja utilisé");
         else return applicationMappers.convertEntityToDto(usersRepository.save(applicationMappers.convertDtoToEntity(userDto)));
-    }
+    }*/
 
     @Override
     public List<UserDto> getAllUsers() {

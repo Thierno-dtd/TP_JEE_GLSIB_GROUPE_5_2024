@@ -84,14 +84,14 @@ public class ApplicationsMapper {
         if(compteDto.getTypeCompte() == TypeCompte.C){
             CompteCourant compteCourant = new CompteCourant();
             BeanUtils.copyProperties(compteDto, compteCourant);
-            compteCourant.setDecouvertAutorise(compteDto.getSm());
+            //compteCourant.setDecouvertAutorise(compteDto.getSm());
             compteCourant.setProprietaire(User.builder().id(compteDto.getProprietaireId()).build());
             return (T) compteCourant;
         }
         if(compteDto.getTypeCompte() == TypeCompte.E) {
             CompteEpargne compteEpargne = new CompteEpargne();
             BeanUtils.copyProperties(compteDto, compteEpargne);
-            compteEpargne.setTaux2Interet(compteDto.getSm());
+            //compteEpargne.setTaux2Interet(compteDto.getSm());
             compteEpargne.setProprietaire(User.builder().id(compteDto.getProprietaireId()).build());
             //compteCourant.setTypeCompte(compteCourantDto.);
             return (T) compteEpargne;
