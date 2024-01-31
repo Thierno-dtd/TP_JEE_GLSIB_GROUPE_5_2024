@@ -27,8 +27,8 @@ public abstract class Compte {
     @ManyToOne
     @JoinColumn(name = "proprietaireId")
     private User proprietaire;
-    @OneToMany(mappedBy = "numCpt")
-    private List<Operation> numCpt;
+    /*@OneToMany(mappedBy = "numCpt")
+    private List<Operation> numCpt;*/
 
 
 }

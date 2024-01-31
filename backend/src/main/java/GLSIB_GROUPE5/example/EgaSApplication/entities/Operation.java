@@ -25,8 +25,7 @@ public class Operation {
     @ManyToOne
     @JoinColumn(name = "compte_id")
     private User client;
-    @ManyToOne
-    @JoinColumn(name = "numCpt")
-    private Compte numCpt;
+
+    private String numCpt;
 
 }

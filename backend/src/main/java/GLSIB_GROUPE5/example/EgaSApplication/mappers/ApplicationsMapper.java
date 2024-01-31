@@ -6,6 +6,8 @@ import GLSIB_GROUPE5.example.EgaSApplication.entities.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class ApplicationsMapper {
     public UserDto convertEntityToDto(User user){
@@ -42,7 +44,7 @@ public class ApplicationsMapper {
                 .type(operation.getType())
                 .montant(operation.getMontant())
                 .clientId(operation.getClient().getId())
-                .numCpt(operation.getNumCpt().getNumCompte())
+                .numCpt(operation.getNumCpt())
                 .operationDate(operation.getDate())
                 .build();
     }
@@ -57,6 +59,13 @@ public class ApplicationsMapper {
     }*/
     public CompteCourant convertDtoToEntity(CompteCourantDto compteCourantDto){
         CompteCourant compteCourant = new CompteCourant();
+        BeanUtils.copyProperties(compteCourantDto,compteCourant);
+        compteCourant.setProprietaire(User.builder().id(compteCourantDto.getProprietaireId()).build());
+        //compteCourant.setTypeCompte(compteCourantDto.);
+        return compteCourant;
+    }
+    public CompteEpargne convertDtoToEntity(CompteEpargneDto compteCourantDto){
+        CompteEpargne compteCourant = new CompteEpargne();
         BeanUtils.copyProperties(compteCourantDto,compteCourant);
         compteCourant.setProprietaire(User.builder().id(compteCourantDto.getProprietaireId()).build());
         //compteCourant.setTypeCompte(compteCourantDto.);
@@ -84,6 +93,7 @@ public class ApplicationsMapper {
         if(compteDto.getTypeCompte() == TypeCompte.C){
             CompteCourant compteCourant = new CompteCourant();
             BeanUtils.copyProperties(compteDto, compteCourant);
+            compteCourant.setDecouvertAutorise(BigDecimal.valueOf(10000));
             //compteCourant.setDecouvertAutorise(compteDto.getSm());
             compteCourant.setProprietaire(User.builder().id(compteDto.getProprietaireId()).build());
             return (T) compteCourant;
@@ -91,12 +101,13 @@ public class ApplicationsMapper {
         if(compteDto.getTypeCompte() == TypeCompte.E) {
             CompteEpargne compteEpargne = new CompteEpargne();
             BeanUtils.copyProperties(compteDto, compteEpargne);
-            //compteEpargne.setTaux2Interet(compteDto.getSm());
+            compteEpargne.setTaux2Interet(BigDecimal.valueOf(0.1));
             compteEpargne.setProprietaire(User.builder().id(compteDto.getProprietaireId()).build());
             //compteCourant.setTypeCompte(compteCourantDto.);
             return (T) compteEpargne;
         }
         return null;
     }
+
 
 }

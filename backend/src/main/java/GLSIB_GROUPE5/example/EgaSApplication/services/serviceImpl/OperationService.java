@@ -2,9 +2,7 @@ package GLSIB_GROUPE5.example.EgaSApplication.services.serviceImpl;
 
 import GLSIB_GROUPE5.example.EgaSApplication.constants.TypeOperation;
 import GLSIB_GROUPE5.example.EgaSApplication.dto.*;
-import GLSIB_GROUPE5.example.EgaSApplication.entities.Compte;
-import GLSIB_GROUPE5.example.EgaSApplication.entities.Operation;
-import GLSIB_GROUPE5.example.EgaSApplication.entities.User;
+import GLSIB_GROUPE5.example.EgaSApplication.entities.*;
 import GLSIB_GROUPE5.example.EgaSApplication.exceptions.InvalidEntityException;
 import GLSIB_GROUPE5.example.EgaSApplication.exceptions.InvalidOperationException;
 import GLSIB_GROUPE5.example.EgaSApplication.mappers.ApplicationsMapper;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,25 +26,51 @@ public class OperationService implements IOperationServcie {
     private final OperationRepository operationRepository;
     private final ApplicationsMapper applicationsMapper;
     private final CompteService compteService;
+    private final UserService userService;
     @Override
     public OperationDto debit(TransfertDto transfertDto, int id) {
-        Compte compte = compteService.getOneCompte(transfertDto.getAccountId());
-        log.info(compte.toString());
-        if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valid");
-        else {
-            compte.setSolde(compte.getSolde().add(transfertDto.getAmount()));
-            compteService.ajouterCompte(compte);
-            return applicationsMapper.convertEntityToDto(
-                    operationRepository.save(
-                            Operation.builder()
-                                    .type(TypeOperation.DEBIT)
-                                    .client(User.builder().id(id).build())
-                                    .date(LocalDateTime.now())
-                                    .montant(transfertDto.getAmount())
-                                    //.numCpt(Compte.builder().numCompte(transfertDto.getAccountId()).build())
-                                    .build()));
+        //Compte compte =
+        if(compteService.getOneCompte(transfertDto.getAccountId()) instanceof CompteCourantDto){
+            CompteCourant compte = applicationsMapper.convertDtoToEntity((CompteCourantDto) compteService.getOneCompte(transfertDto.getAccountId()));
+            log.info("1");
+            if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valid");
+            else {
+                compte.setSolde(compte.getSolde().add(transfertDto.getAmount()));
+                compteService.ajouterCompte(compte);
+                return applicationsMapper.convertEntityToDto(
+                        operationRepository.save(
+                                Operation.builder()
+                                        .type(TypeOperation.DEBIT)
+                                        .client(User.builder().id(id).build())
+                                        .date(LocalDateTime.now())
+                                        .montant(transfertDto.getAmount())
+                                        .numCpt(transfertDto.getAccountId())
+                                        .build()));
+            }
+
+        }else
+        if(compteService.getOneCompte(transfertDto.getAccountId()) instanceof CompteEpargneDto)
+            {
+            CompteEpargne compte = applicationsMapper.convertDtoToEntity((CompteEpargneDto) compteService.getOneCompte(transfertDto.getAccountId()));
+            log.info("2");
+            if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valid");
+            else {
+                compte.setSolde(compte.getSolde().add(transfertDto.getAmount()));
+                compteService.ajouterCompte(compte);
+                return applicationsMapper.convertEntityToDto(
+                        operationRepository.save(
+                                Operation.builder()
+                                        .type(TypeOperation.DEBIT)
+                                        .client(User.builder().id(id).build())
+                                        .date(LocalDateTime.now())
+                                        .montant(transfertDto.getAmount())
+                                        .numCpt(transfertDto.getAccountId())
+                                        .build()));
+            }
+
         }
 
+    return null;
     }
 
     @Override
@@ -61,36 +86,77 @@ public class OperationService implements IOperationServcie {
             if(cpt.getSolde().compareTo(transfertDto.getAmount()) == -1) throw new InvalidOperationException("Votre solde ne vous permet pas cette opération");
         }
 
-        Compte compte = compteService.getOneCompte(transfertDto.getAccountId());
-        if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valide");
-        else {
-            compte.setSolde(compte.getSolde().subtract(transfertDto.getAmount()));
-            compteService.ajouterCompte(compte);
-            return applicationsMapper.convertEntityToDto(
-                    operationRepository.save(
-                            Operation.builder()
-                                    .type(TypeOperation.CREDIT)
-                                    .client(User.builder().id(id).build())
-                                    .date(LocalDateTime.now())
-                                    .montant(transfertDto.getAmount())
-                                    //.numCpt(Compte.builder().numCompte(transfertDto.getAccountId()).build())
-                                    .build()));
+        if(compteService.getOneCompte(transfertDto.getAccountId()) instanceof CompteCourantDto){
+
+            CompteCourant compte = applicationsMapper.convertDtoToEntity((CompteCourantDto) compteService.getOneCompte(transfertDto.getAccountId()));
+            if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valide");
+            else {
+                compte.setSolde(compte.getSolde().subtract(transfertDto.getAmount()));
+                compteService.ajouterCompte(compte);
+                return applicationsMapper.convertEntityToDto(
+                        operationRepository.save(
+                                Operation.builder()
+                                        .type(TypeOperation.CREDIT)
+                                        .client(User.builder().id(id).build())
+                                        .date(LocalDateTime.now())
+                                        .montant(transfertDto.getAmount())
+                                        .numCpt(transfertDto.getAccountId())
+                                        .build()));
+            }
         }
+
+        if(compteService.getOneCompte(transfertDto.getAccountId()) instanceof CompteEpargneDto){
+
+            CompteEpargne compte = applicationsMapper.convertDtoToEntity((CompteEpargneDto) compteService.getOneCompte(transfertDto.getAccountId()));
+            if(compte == null) throw new InvalidOperationException("Ce numéros de compte n'est pas valide");
+            else {
+                compte.setSolde(compte.getSolde().subtract(transfertDto.getAmount()));
+                compteService.ajouterCompte(compte);
+                return applicationsMapper.convertEntityToDto(
+                        operationRepository.save(
+                                Operation.builder()
+                                        .type(TypeOperation.CREDIT)
+                                        .client(User.builder().id(id).build())
+                                        .date(LocalDateTime.now())
+                                        .montant(transfertDto.getAmount())
+                                        .numCpt(transfertDto.getAccountId())
+                                        .build()));
+            }
+        }
+       return null;
     }
 
     @Override
     public List<OperationDto> virement(VirementDto virementDto, int id) {
         List<OperationDto> lstOp = new ArrayList<>();
         lstOp.add(credit(dtoToDto(virementDto), id));
-        lstOp.add(debit(dtoToDto(virementDto), id));
+        lstOp.add(debit(dtoToDto1(virementDto), id));
         return lstOp;
     }
 
     @Override
-    public List<OperationDto> listeOperation(String numCpt, LocalDate date) {
-        Compte cpt = compteService.getOneCompte(numCpt);
-        if(cpt==null) throw new InvalidEntityException("Ce numéro de compte n''existe pas");
-        return operationRepository.findByNumCptAndDateAfter(cpt, date).stream().map(op -> applicationsMapper.convertEntityToDto(op)).collect(Collectors.toList());
+    public List<OperationDto> listeOperationByNumCpt(RequestOperationDto requestOperationDto) {
+        if(compteService.getOneCompte(requestOperationDto.getNumCpt()) instanceof CompteEpargneDto){
+            CompteEpargne cpt = applicationsMapper.convertDtoToEntity((CompteEpargneDto) compteService.getOneCompte(requestOperationDto.getNumCpt()));
+            if(cpt==null) throw new InvalidEntityException("Ce numéro de compte n''existe pas");
+            if(requestOperationDto.getDtDetut().isAfter(requestOperationDto.getDtFin())) throw new InvalidOperationException(" la date de depart est supérieur a la date final");
+            return operationRepository.findByNumCptAndDateAfterAndDateBefore(requestOperationDto.getNumCpt(),convertirLocalDateEnLocalDateTime(requestOperationDto.getDtDetut()) , convertirLocalDateEnLocalDateTime(requestOperationDto.getDtFin())).stream().map(op -> applicationsMapper.convertEntityToDto(op)).collect(Collectors.toList());
+
+        }if(compteService.getOneCompte(requestOperationDto.getNumCpt()) instanceof CompteCourantDto){
+            CompteCourant cpt = applicationsMapper.convertDtoToEntity((CompteCourantDto) compteService.getOneCompte(requestOperationDto.getNumCpt()));
+            if(cpt==null) throw new InvalidEntityException("Ce numéro de compte n''existe pas");
+            if(requestOperationDto.getDtDetut().isAfter(requestOperationDto.getDtFin())) throw new InvalidOperationException(" la date de depart est supérieur a la date final");
+            return operationRepository.findByNumCptAndDateAfterAndDateBefore(requestOperationDto.getNumCpt(),convertirLocalDateEnLocalDateTime(requestOperationDto.getDtDetut()),convertirLocalDateEnLocalDateTime(requestOperationDto.getDtDetut())).stream().map(op -> applicationsMapper.convertEntityToDto(op)).collect(Collectors.toList());
+
+        }
+        return null;
+       }
+
+    @Override
+    public List<OperationDto> listeOperationByClientId(RequestOperationIDto requestOperationDto) {
+        if(requestOperationDto.getDtDetut().isAfter(requestOperationDto.getDtFin())) throw new InvalidOperationException(" la date de depart est supérieur a la date final");
+        return operationRepository.findByClientAndDateAfterAndDateBefore(User.builder().id(requestOperationDto.getId()).build(), convertirLocalDateEnLocalDateTime(requestOperationDto.getDtDetut()),convertirLocalDateEnLocalDateTime(requestOperationDto.getDtFin())).stream().map(op -> applicationsMapper.convertEntityToDto(op)).collect(Collectors.toList());
+
     }
 
     public TransfertDto dtoToDto(VirementDto virementDto){
@@ -98,6 +164,18 @@ public class OperationService implements IOperationServcie {
                 .accountId(virementDto.getAccountSource())
                 .amount(virementDto.getAmount())
                 .build();
+    }
+
+    public TransfertDto dtoToDto1(VirementDto virementDto){
+        return TransfertDto.builder()
+                .accountId(virementDto.getAccountDestination())
+                .amount(virementDto.getAmount())
+                .build();
+    }
+
+    public  LocalDateTime convertirLocalDateEnLocalDateTime(LocalDate localDate) {
+        // Utilisez la méthode atStartOfDay pour convertir LocalDate en LocalDateTime
+        return localDate.atStartOfDay();
     }
 
 }

@@ -31,6 +31,7 @@ public class CompteService implements ICompteServices {
     public <T> T ajouterCompte(CompteRequestDto compteDto) {
         Compte cpt = applicationsMapper.convertDtoToEntity(compteDto);
             String nouveauNumCompte = generateFormattedIban();
+
             cpt.setNumCompte(nouveauNumCompte);
             cpt.setSolde(BigDecimal.ZERO);
             cpt.setPassword(passwordEncoder.encode(compteDto.getPassword()));

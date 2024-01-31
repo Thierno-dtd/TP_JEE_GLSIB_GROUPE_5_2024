@@ -9,6 +9,7 @@ import GLSIB_GROUPE5.example.EgaSApplication.mappers.ApplicationsMapper;
 import GLSIB_GROUPE5.example.EgaSApplication.repositories.UserRepository;
 import GLSIB_GROUPE5.example.EgaSApplication.services.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class UserService implements IUserService {
     private final UserRepository usersRepository;
     private final ApplicationsMapper applicationMappers;
+    private final  PasswordEncoder passwordEncoder;
 
     /*@Override
     public UserDto register(UserDto userDto) {
@@ -52,6 +54,7 @@ public class UserService implements IUserService {
         if(getOneUser(id) ==null) new InvalidEntityException("l'user que vous vouliez modifier n'existe pas");
         User user = applicationMappers.convertDtoToEntity(userDto);
         user.setId(id);
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return applicationMappers.convertEntityToDto(usersRepository.save(user));
     }
 

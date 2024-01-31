@@ -1,11 +1,10 @@
 package GLSIB_GROUPE5.example.EgaSApplication.controllers;
 
-import GLSIB_GROUPE5.example.EgaSApplication.dto.OperationDto;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.TransfertDto;
-import GLSIB_GROUPE5.example.EgaSApplication.dto.VirementDto;
+import GLSIB_GROUPE5.example.EgaSApplication.dto.*;
 import GLSIB_GROUPE5.example.EgaSApplication.services.serviceImpl.OperationService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -17,22 +16,44 @@ import java.util.List;
 public class OperationController {
     private final OperationService operationService;
     @PostMapping("debit/{id}")
-    public ResponseEntity<OperationDto> debit(@RequestBody TransfertDto transfertDto, @PathVariable int id){
-        return  ResponseEntity.ok(operationService.debit(transfertDto, id));
+    @ApiOperation("debit")
+    public OperationDto debit(
+            @RequestBody
+            @ApiParam(name = "transfertDto", required = true)
+             TransfertDto transfertDto,
+            @PathVariable
+            @ApiParam(name = "id", required = true) int id){
+        return  operationService.debit(transfertDto, id);
     }
 
     @PostMapping("credit/{id}")
-    public ResponseEntity<OperationDto> credi(@RequestBody TransfertDto transfertDto, @PathVariable int id){
-        return  ResponseEntity.ok(operationService.credit(transfertDto, id));
+    public OperationDto credi(@RequestBody TransfertDto transfertDto, @PathVariable int id){
+        return  operationService.credit(transfertDto, id);
     }
 
     @PostMapping("virement/{id}")
-    public ResponseEntity<List<OperationDto>> virement(@RequestBody VirementDto virementDto, @PathVariable int id){
-        return  ResponseEntity.ok(operationService.virement(virementDto, id));
+    @ApiOperation("virement")
+    public List<OperationDto> virement(
+            @RequestBody
+            @ApiParam(name = "virementDto", required = true) VirementDto virementDto,
+            @PathVariable
+            @ApiParam(name = "id", required = true)int id){
+        return  operationService.virement(virementDto, id);
     }
 
-    @GetMapping("ListeOperations/{numCpt}/{date}")
-    public ResponseEntity<List<OperationDto>> getOperation(@PathVariable String numCpt, @PathVariable LocalDate date){
-        return  ResponseEntity.ok(operationService.listeOperation(numCpt, date));
+    @PostMapping("ListeOperations/")
+    @ApiOperation("getOperation")
+    public List<OperationDto> getOperation(
+            @RequestBody
+            @ApiParam(name = "requestOperationDto", required = true) RequestOperationDto requestOperationDto){
+        return  operationService.listeOperationByNumCpt(requestOperationDto);
+    }
+
+    @PostMapping("ListeOperationsByClient/")
+    @ApiOperation("getOperation")
+    public List<OperationDto> getOperationByClient(
+            @RequestBody
+            @ApiParam(name = "requestOperationDto", required = true) RequestOperationIDto requestOperationDto){
+        return  operationService.listeOperationByClientId(requestOperationDto);
     }
 }

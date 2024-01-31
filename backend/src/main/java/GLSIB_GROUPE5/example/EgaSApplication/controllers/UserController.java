@@ -2,6 +2,8 @@ package GLSIB_GROUPE5.example.EgaSApplication.controllers;
 
 import GLSIB_GROUPE5.example.EgaSApplication.dto.UserDto;
 import GLSIB_GROUPE5.example.EgaSApplication.services.serviceImpl.UserService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,29 +18,45 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/")
+    /*@PostMapping("/")
     public ResponseEntity<UserDto> register(@RequestBody UserDto userDto){
         return ResponseEntity.ok(userService.register(userDto));
-    }
+    }*/
     @GetMapping("/")
-    public ResponseEntity<List<UserDto>> getAllUser(){
-        return ResponseEntity.ok(userService.getAllUsers());
+    @ApiOperation("Liste des users")
+    public List<UserDto> getAllUser(){
+        return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getOneUsers(@PathVariable int id){
-        return ResponseEntity.ok(userService.getOneUser(id));
+    @ApiOperation("get one user")
+    public UserDto getOneUsers(
+            @PathVariable
+            @ApiParam(name = "id", required = true)
+            int id){
+        return userService.getOneUser(id);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int id){
+    @ApiOperation("delete user by id")
+    public void deleteUser(
+            @PathVariable
+            @ApiParam(name = "id", required = true)
+            int id){
         userService.deleteUser(id);
-        return ResponseEntity.accepted().build();
+
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDto> ModifyUser(@PathVariable int id,@Valid @RequestBody UserDto userDto){
-        return ResponseEntity.ok(userService.updateUser(userDto, id));
+    @ApiOperation("modify user")
+    public UserDto ModifyUser(
+            @PathVariable
+            @ApiParam(name = "id", required = true)
+            int id,
+            @Valid @RequestBody
+            @ApiParam(name = "UserDto", required = true)
+            UserDto userDto){
+        return userService.updateUser(userDto, id);
     }
 
 }
